@@ -1,3 +1,4 @@
+2019-10-23 18:46:37 Kcode=242 ckN=1 T=2 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
 2019-10-23 18:43:57 err=noValidOkCode ckN=1 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
 2019-10-23 18:43:04 err=noValidOkCode ckN=2 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=364beeb9d67580f6ab8f1906e36f576a7ff3925d
 2019-10-23 18:41:16 err=noValidOkCode ckN=4 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=6a0b36cde3bf78babfce15b8da8af79dc694b231
@@ -47,4 +48,3 @@
 2019-10-23 02:08:00 okN=0 failN=2 checkPass=no checkRes=[150]<fail>[565]<fail>
 2019-10-23 01:08:01 okN=0 failN=2 checkPass=no checkRes=[150]<fail>[565]<fail>
 2019-10-23 00:08:00 okN=0 failN=2 checkPass=no checkRes=[150]<fail>[565]<fail>
-2019-10-22 23:08:03 okN=1 failN=1 checkPass=no syncGit=no checkRes=[150]<ok>[644]<fail>
