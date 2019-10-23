@@ -1,22 +1,18 @@
 #!/bin/bash
 ck=$1;shift; n1=$1;shift; n2=$1;shift;
 
-# 892972fd5a016156bfad33c119ce1283a801e3f6 13521838587 20191020
-# 6a0b36cde3bf78babfce15b8da8af79dc694b231 18515987963 20190901
-# 8db19b98f9f8e97820da19772e77875d90407413 18866674211 20191023
-# 364beeb9d67580f6ab8f1906e36f576a7ff3925d 18866674180 20191023
-#
-# b45c33cf0ab69f59fe21fa13d0000980fa6a0548 17109324204 20191023
-# 4a961a7390091a410675839e8d4622bf8b37fef7 17109324204 20191020 1023 x
-# 25c04bd9b5b7e78a44f5546219dacd1d2fa8913f 13001077534 20191014 1023 slow
-# d3b9dfd6bdb0e7ef840622cb5e40354e612cf539 13521838587 20191014
-# 6424b6c327b5eb5961733b3de77834f38b21104f 13521838587 20190915
-#
-#如果速度很慢，重新登录换一个Cookie
-
 # const param
 id_k="BkPTdVZaOYaoML6UwMGJyg=="
 id_h="ZT5pUv4JKL1tomT0u9SEdA=="
+
+#result
+res_code=""
+resfile=tmpResultCode.tmp
+gitlogfile=crontab.log
+gitcodefile=vcode.txt
+#ok inf
+ok_code=242
+ok_id="${id_k}"
 
 query_park()
 {
@@ -59,6 +55,7 @@ parse_res()
     elif echo "${p_res}" | grep -q "没有优惠券了"
     then
         p_n=`echo "${p_res}" | egrep  "(没有优惠券了)" | grep -o "[0-9]次" | grep -o "[0-9]"`
+        [ "${p_n}x" == "x" ] && p_n="x"
         echo "res:fail:code:${p_n}"
     else
         echo ${p_res}
@@ -73,8 +70,8 @@ check_park()
 
     # BkPTdVZaOYaoML6UwMGJyg==
     # ZT5pUv4JKL1tomT0u9SEdA==
-    [ "${p_code}x" == "x" ] && p_code="242"
-    [ "${p_id}x" == "x" ] && p_id="BkPTdVZaOYaoML6UwMGJyg=="
+    [ "${p_code}x" == "x" ] && p_code="${ok_code}"
+    [ "${p_id}x" == "x" ] && p_id="${ok_id}"
     #echo "ck=#${p_c}# code=#${p_code}# id=#${p_id}#"
 
     p_html=`query_park ${p_c} ${p_code} ${p_id}`
@@ -88,7 +85,7 @@ do_try()
     p_s=`check_park ${p_ck} ${p_code} ${id_h}`
     if echo "${p_s}" | grep -q "res:success"
     then
-        echo -n -e " [\\033[32m\\033[1m${p_code}\\033[0m]"
+        echo -n -e " [\\033[32m\\033[1m$(printf "%3d" ${p_code})\\033[0m]"
         res_code="${res_code}${p_code} "
     else
         ns=`echo "${p_s}" | grep "res:fail:code" | cut -d ":" -f 4`
@@ -109,27 +106,53 @@ sendgit()
 
     echo "${p_gittime} ${p_msg}" | cat - ${p_dir}/${p_file} | head -n ${p_linen} > ${p_tmpfile}
     cat ${p_tmpfile} > ${p_dir}/${p_file}
-    cd ${p_dir} && git commit -a -m "add line by cmd"
-    cd ${p_dir} && git push
+    cd ${p_dir} && git commit -a -m "add line by cmd" && cd -
+    cd ${p_dir} && git push && cd -
+}
+loggit()
+{
+    p_msg=$*
+    sendgit ${gitlogfile} 50 ${p_msg}
+}
+savegit()
+{
+    p_msg=$*
+    sendgit ${gitcodefile} 7 ${p_msg}
 }
 
+# ckinfo 392a777819e640839d2d838a2855239f239a53f4 15263819410 20191023
+# ckinfo ef74b1cf95139da7ce9d19ce02113a2f5914f71c 17128240042 20191023
+# ckinfo 24a6af824b90763b738663e64464c682ed5d09ad 17128240164 20191023
+# ckinfo a75ef402921948a497acdb38b0bef33c5b245e90 18866478794 20191023
+#
+# ckinfo 25c04bd9b5b7e78a44f5546219dacd1d2fa8913f 13001077534 20191014 1023 slow
+# ckinfo 892972fd5a016156bfad33c119ce1283a801e3f6 13521838587 20191020 1023 x
+# ckinfo 4a961a7390091a410675839e8d4622bf8b37fef7 17109324204 20191020 1023 x
+# ckinfo 6a0b36cde3bf78babfce15b8da8af79dc694b231 18515987963 20190901 1023 x
+# ckinfo 364beeb9d67580f6ab8f1906e36f576a7ff3925d 18866674180 20191023 1023 x
+# ckinfo 8db19b98f9f8e97820da19772e77875d90407413 18866674211 20191023 1023 x
+#
+#如果速度很慢，重新登录换一个Cookie
+
 # test cookie
-best_ck="6424b6c327b5eb5961733b3de77834f38b21104f"
+ck_set="
+392a777819e640839d2d838a2855239f239a53f4
+ef74b1cf95139da7ce9d19ce02113a2f5914f71c
+24a6af824b90763b738663e64464c682ed5d09ad
+a75ef402921948a497acdb38b0bef33c5b245e90
+"
+best_ck=""
 besk_ckt=999
 ck_OK_n=0
-for ick in \
-    892972fd5a016156bfad33c119ce1283a801e3f6 \
-    6a0b36cde3bf78babfce15b8da8af79dc694b231 \
-    8db19b98f9f8e97820da19772e77875d90407413 \
-    364beeb9d67580f6ab8f1906e36f576a7ff3925d
+for ick in ${ck_set}
 do
     cks1=`date +%s`
-    check_park ${ick} | grep -q "res:success" && ck_flag="Y" || ck_flag="n"
+    check_park ${ick} | grep -q "res:fail:ck" && ck_flag="n" || ck_flag="Y"
     cks2=`date +%s`
     ck_t=$((cks2-cks1))
     echo -n "[$(printf "%3d" ${ck_t})] ${ck_flag} ${ick}"
     [ "${ck_flag}x" == "Yx" ] && ck_OK_n=$((ck_OK_n+1))
-    [ "${ck_flag}x" == "Yx" -a ${ck_t} -lt ${besk_ckt} ] && { besk_ckt=${ck_t}; best_ck="${ick}"; echo " U"; } || { echo " -"; }
+    [ "${ck_flag}x" == "Yx" -a \( ${ck_t} -lt ${besk_ckt} -o "${best_ck}x" == "x" \) ] && { besk_ckt=${ck_t}; best_ck="${ick}"; echo " U"; } || { echo " -"; }
 done
 echo "ckN:${ck_OK_n} T:${besk_ckt} ${best_ck}"
 
@@ -137,68 +160,83 @@ echo "ckN:${ck_OK_n} T:${besk_ckt} ${best_ck}"
 [ "${n1}x" == "x" ] && n1=1
 [ "${n2}x" == "x" ] && n2=999
 echo -n -e "\\033[32m\\033[1m$ BEGIN \\033[0m "; date +"%Y-%m-%d %H:%M:%S"; echo " begin=${n1} end=${n2} ck=${ck}"
+if [ "${ck}x" == "x" ]
+then
+    errExitMsg="ckN=${ck_OK_n} T=${besk_ckt} err=noValidCk"
+    echo "${errExitMsg}"
+    loggit "${errExitMsg}"
+    exit 1
+fi
 
-#ok_info
-code_k="242"
-code_h="116"
-ok_id="${id_k}"
-ok_code="${code_k}"
-
-#result
-res_code=""
-resfile=tmpResultCode.tmp
-
-okN=0
-failN=0
-checkRes=""
+cfm_okN=0
+cfm_failN=0
+cfm_checkRes=""
+ok_code_bak=""
 touch ${resfile}
 for i in `cat ${resfile}`
 do
     s=`check_park ${ck} ${i} ${id_h}`
     if echo "${s}" | grep -q "res:success" 
     then
-        okN=$((okN+1))
+        ok_code_bak=${i}
+        cfm_okN=$((cfm_okN+1))
         res_code="${res_code}${i} "
-        checkRes="${checkRes}[${i}]<ok>"
+        cfm_checkRes="${cfm_checkRes}[${i}]<ok>"
     else
-        failN=$((failN+1))
-        checkRes="${checkRes}[${i}]<fail>"
+        cfm_failN=$((cfm_failN+1))
+        cfm_checkRes="${cfm_checkRes}[${i}]<fail>"
     fi
 done
-checkPassFlag="no"
+cfm_passFlag="no"
 needSaveGitCode="no"
-if [ ${okN} -ge 1 ]
+if [ ${cfm_okN} -ge 1 ]
 then
-    if [ ${okN} -ge 2 -o ${failN} -eq 0 ]
+    if [ ${cfm_okN} -ge 2 -o ${cfm_failN} -eq 0 ]
     then
-        checkPassFlag="yes"
-        [ ${failN} -gt 0 ] && needSaveGitCode="yes"
+        cfm_passFlag="yes"
+        [ ${cfm_failN} -gt 0 ] && needSaveGitCode="yes"
     fi
 fi
-logTxt="ckN=${ck_OK_n} T=${besk_ckt} codeN=${okN}:${failN} checkPass=${checkPassFlag} syncGit=${needSaveGitCode} checkRes=${checkRes} ck=${ck}"
-echo ${logTxt}
+logTxt="ckN=${ck_OK_n} T=${besk_ckt} codeN=${cfm_okN}:${cfm_failN} checkPass=${cfm_passFlag} syncGit=${needSaveGitCode} checkRes=${cfm_checkRes} ck=${ck}"
+
+# check ok_code and ok_id
+check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && logTxt="Kcode=${ok_code} ${logTxt}" || ok_code=""
+[ "${ok_code}x" == "x" -a "${ok_code_bak}x" != "x" ] && { ok_code=${ok_code_bak}; ok_id="${id_h}"; logTxt="Hcode=${ok_code} ${logTxt}"; }
+[ "${ok_code}x" == "x" ] && logTxt="err=noValidOkCode ${logTxt}"
 
 # send by github
-sendgit crontab.log 50 ${logTxt}
+echo ${logTxt}
+loggit ${logTxt}
 
+# exit if no ok_code can use
+if [ "${ok_code}x" == "x" ]
+then
+    exit 1
+fi
 
-if [ "${checkPassFlag}x" == "yesx" ]
+# reset ck
+for ick in ${ck_set}
+do
+    check_park ${ick} ${ok_code} ${ok_id} | grep -q "res:success" && echo "[RST] Y ok_code=${ok_code} ck=${ick}" || echo "[RST] n ok_code=${ok_code} ck=${ick}"
+done
+
+if [ "${cfm_passFlag}x" == "yesx" ]
 then
     # sync code to git if need
     if [ "${needSaveGitCode}x" == "yesx" ]
     then
         echo "${res_code}" > ${resfile}
-        sendgit vcode.txt 7 ${res_code}
+        savegit ${res_code}
     fi
     exit 0
 fi
 
 
 
-d1=`date +"%Y-%m-%d %H:%M:%S"`
-ln=30
-n=0
-lc=0
+meter_d1=`date +"%Y-%m-%d %H:%M:%S"`
+meter_n=0
+ctrl_ln=30
+ctrl_lc=0
 echo -n `date +%H:%M:%S`
 for i in `seq ${n1} 3 ${n2}`
 do 
@@ -207,27 +245,27 @@ do
     rstSucFlag="false"
     for idxRst in `seq 1 9`
     do
-        check_park ${ck} | grep -q "res:success" && echo -n " Y${idxRst}" && rstSucFlag="success" && break
+        check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && { echo -n " Y${idxRst}"; rstSucFlag="success"; break; } || echo "<${idxRst}>"
     done
     [ "${rstSucFlag}x" != "successx" ] && { echo " Fail"; exit 1; }
     
-    do_try ${ck} ${j}; n=$((n+1)); lc=$((lc+1)); j=$((j+1));
-    do_try ${ck} ${j}; n=$((n+1)); lc=$((lc+1)); j=$((j+1));
-    do_try ${ck} ${j}; n=$((n+1)); lc=$((lc+1)); j=$((j+1));
-    if [ ${lc} -ge ${ln} ]
+    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+    if [ ${ctrl_lc} -ge ${ctrl_ln} ]
     then
         echo ""
         echo -n `date +%H:%M:%S`
-        lc=0
+        ctrl_lc=0
     fi
 done
-d2=`date +%Y-%m-%d#%H:%M:%S`
+meter_d2=`date +%Y-%m-%d#%H:%M:%S`
 echo ""
-res_code=`echo "${res_code}" | grep "[0-9]\+" -o | sort  -n  | uniq | paste -s -d " " -`
-echo "beginT=${d1} endT=${d2} n=${n} res_code=${res_code}"
+res_code=`echo "${res_code}" | grep "[0-9]\+" -o | sort -n | uniq | paste -s -d " " -`
+echo "beginT=${meter_d1} endT=${meter_d2} n=${meter_n} res_code=${res_code}"
 echo "${res_code}" > ${resfile}
 
 
 # send by github
-sendgit vcode.txt 7 ${res_code}
+savegit ${res_code}
 
