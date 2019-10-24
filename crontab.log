@@ -1,3 +1,4 @@
+10-25 03:08:04 Bk=242 ckN=4:0s codeN=3:0:yes:no checkRes=[760]<ok>[791]<ok>[908]<ok> ck=392a777819e640839d2d838a2855239f239a53f4
 10-25 02:08:04 Bk=242 ckN=4:0s codeN=3:0:yes:no checkRes=[760]<ok>[791]<ok>[908]<ok> ck=392a777819e640839d2d838a2855239f239a53f4
 10-25 01:08:04 Bk=242 ckN=4:0s codeN=3:0:yes:no checkRes=[760]<ok>[791]<ok>[908]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-25 00:08:03 Bk=242 ckN=4:0s codeN=1:1:no:NA checkRes=[247]<fail>[760]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
@@ -47,4 +48,3 @@
 2019-10-23 19:09:56 Kcode=242 ckN=5 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
 2019-10-23 19:08:02 Kcode=242 ckN=3 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
 2019-10-23 18:46:37 Kcode=242 ckN=1 T=2 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
-2019-10-23 18:43:57 err=noValidOkCode ckN=1 T=0 codeN=0:0 checkPass=no syncGit=no checkRes= ck=892972fd5a016156bfad33c119ce1283a801e3f6
