@@ -10,9 +10,18 @@ res_code=""
 resfile=tmpResultCode.tmp
 gitlogfile=crontab.log
 gitcodefile=vcode.txt
+configfile=tmpConfig.cfg
+configKeyOkCode="cfg_ok_code"
+configKeyOkId="cfg_ok_id"
+configSep=":"
 #ok inf
 ok_code=242
 ok_id="${id_k}"
+touch ${configfile}
+cfgValue=`cat "${configfile}" | grep "${configKeyOkCode}" | cut -d "${configSep}" -f 2-`
+[ "${cfgValue}x" != "x" ] && ok_code=${cfgValue}
+cfgValue=`cat "${configfile}" | grep "${configKeyOkId}" | cut -d "${configSep}" -f 2-`
+[ "${cfgValue}x" != "x" ] && ok_id=${cfgValue}
 
 query_park()
 {
@@ -102,12 +111,12 @@ sendgit()
 
     p_dir=~/work/code/github/board
     p_tmpfile="tmp_${p_file}.tmp"
-    p_gittime=`date +"%Y-%m-%d %H:%M:%S"`
+    p_gittime=`date +"%m-%d %H:%M:%S"`
 
     echo "${p_gittime} ${p_msg}" | cat - ${p_dir}/${p_file} | head -n ${p_linen} > ${p_tmpfile}
     cat ${p_tmpfile} > ${p_dir}/${p_file}
-    cd ${p_dir} && git commit -a -m "add line by cmd" && cd -
-    cd ${p_dir} && git push && cd -
+    cd ${p_dir} && git commit -a -m "add line by cmd"; cd -
+    cd ${p_dir} && git push; cd -
 }
 loggit()
 {
@@ -142,7 +151,7 @@ ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 a75ef402921948a497acdb38b0bef33c5b245e90
 "
 best_ck=""
-besk_ckt=999
+besk_ckt=998
 ck_OK_n=0
 for ick in ${ck_set}
 do
@@ -157,9 +166,9 @@ done
 echo "ckN:${ck_OK_n} T:${besk_ckt} ${best_ck}"
 
 [ "${ck}x" == "x" ] && ck="${best_ck}"
-[ "${n1}x" == "x" ] && n1=1
+[ "${n1}x" == "x" ] && n1=10
 [ "${n2}x" == "x" ] && n2=999
-echo -n -e "\\033[32m\\033[1m$ BEGIN \\033[0m "; date +"%Y-%m-%d %H:%M:%S"; echo " begin=${n1} end=${n2} ck=${ck}"
+echo -n -e "\\033[32m\\033[1m$ BEGIN \\033[0m "; date +"%Y-%m-%d %H:%M:%S"; echo " begin=${n1} end=${n2} ck=${ck} ${ok_id:0:2}_Code=${ok_code}"
 if [ "${ck}x" == "x" ]
 then
     errExitMsg="ckN=${ck_OK_n} T=${besk_ckt} err=noValidCk"
@@ -188,20 +197,20 @@ do
     fi
 done
 cfm_passFlag="no"
-needSaveGitCode="no"
+needSaveGitCode="NA"
 if [ ${cfm_okN} -ge 1 ]
 then
     if [ ${cfm_okN} -ge 2 -o ${cfm_failN} -eq 0 ]
     then
         cfm_passFlag="yes"
-        [ ${cfm_failN} -gt 0 ] && needSaveGitCode="yes"
+        [ ${cfm_failN} -gt 0 ] && needSaveGitCode="yes" || needSaveGitCode="no"
     fi
 fi
-logTxt="ckN=${ck_OK_n} T=${besk_ckt} codeN=${cfm_okN}:${cfm_failN} checkPass=${cfm_passFlag} syncGit=${needSaveGitCode} checkRes=${cfm_checkRes} ck=${ck}"
+logTxt="ckN=${ck_OK_n}:${besk_ckt}s codeN=${cfm_okN}:${cfm_failN}:${cfm_passFlag}:${needSaveGitCode} checkRes=${cfm_checkRes} ck=${ck}"
 
 # check ok_code and ok_id
-check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && logTxt="Kcode=${ok_code} ${logTxt}" || ok_code=""
-[ "${ok_code}x" == "x" -a "${ok_code_bak}x" != "x" ] && { ok_code=${ok_code_bak}; ok_id="${id_h}"; logTxt="Hcode=${ok_code} ${logTxt}"; }
+check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && logTxt="${ok_id:0:2}=${ok_code} ${logTxt}" || ok_code=""
+[ "${ok_code}x" == "x" -a "${ok_code_bak}x" != "x" ] && { ok_code=${ok_code_bak}; ok_id="${id_h}"; logTxt="H=${ok_code} ${logTxt}"; }
 [ "${ok_code}x" == "x" ] && logTxt="err=noValidOkCode ${logTxt}"
 
 # send by github
@@ -213,6 +222,11 @@ if [ "${ok_code}x" == "x" ]
 then
     exit 1
 fi
+
+# save ok_code and ok_id
+echo -n "" >${configfile}
+echo "${configKeyOkCode}${configSep}${ok_code}" >> ${configfile}
+echo "${configKeyOkId}${configSep}${ok_id}" >> ${configfile}
 
 # reset ck
 for ick in ${ck_set}
