@@ -1,3 +1,4 @@
+10-27 19:06:05 Bk=242 ckN=4:0s codeN=2:0:yes:no checkRes=[233]<ok>[687]<ok> ck=24a6af824b90763b738663e64464c682ed5d09ad
 10-27 18:06:04 Bk=242 ckN=4:0s codeN=2:0:yes:no checkRes=[233]<ok>[687]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-27 17:06:03 Bk=242 ckN=4:0s codeN=2:0:yes:no checkRes=[233]<ok>[687]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-27 16:06:30 Bk=242 ckN=4:2s codeN=2:0:yes:no checkRes=[233]<ok>[687]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
@@ -57,4 +58,3 @@
 10-26 01:08:04 Bk=242 ckN=4:0s codeN=3:0:yes:no checkRes=[126]<ok>[279]<ok>[733]<ok> ck=392a777819e640839d2d838a2855239f239a53f4
 10-26 00:08:07 Bk=242 ckN=4:0s codeN=1:1:no:NA checkRes=[733]<ok>[791]<fail> ck=a75ef402921948a497acdb38b0bef33c5b245e90
 10-25 23:08:06 Bk=242 ckN=4:0s codeN=2:0:yes:no checkRes=[733]<ok>[791]<ok> ck=a75ef402921948a497acdb38b0bef33c5b245e90
-10-25 22:08:04 Bk=242 ckN=4:0s codeN=2:0:yes:no checkRes=[733]<ok>[791]<ok> ck=392a777819e640839d2d838a2855239f239a53f4
