@@ -1,3 +1,4 @@
+10-31 00:39:45 log_KTV_code: 242 563
 10-31 00:32:34 Bk=242 ckN=9:0:0s codeN=2:0:force_KTV:NA checkRes=[105]<ok>[793]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-31 00:06:25 Bk=242 ckN=9:0:0s codeN=0:1:no:NA checkRes=[157]<fail> ck=24a6af824b90763b738663e64464c682ed5d09ad
 10-30 23:41:56 log_KTV_code: 242 563
@@ -57,4 +58,3 @@
 10-29 01:32:12 Bk=242 ckN=9:0:0s codeN=2:0:force_KTV:NA checkRes=[207]<ok>[472]<ok> ck=24a6af824b90763b738663e64464c682ed5d09ad
 10-29 01:06:36 Bk=242 ckN=9:0:2s codeN=2:0:yes:no checkRes=[207]<ok>[472]<ok> ck=a75ef402921948a497acdb38b0bef33c5b245e90
 10-29 00:41:07 log_KTV_code: 242 572
-10-29 00:33:11 Bk=242 ckN=9:0:0s codeN=2:0:force_KTV:NA checkRes=[207]<ok>[472]<ok> ck=a75ef402921948a497acdb38b0bef33c5b245e90
