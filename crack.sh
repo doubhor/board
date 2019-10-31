@@ -1,26 +1,114 @@
 #!/bin/bash
-ck=$1;shift; n1=$1;shift; n2=$1;shift;
 
-# const param
+# $0 [forceSeek=KTV/...]
+shellname=`basename $0 | cut -d "." -f 1`
+procname="${shellname}_$$"
+cmdoptfile="tmp_cmdopt_${procname}.swap"
+echo -n "" > ${cmdoptfile}
+for iter_cmdopt in "$@"
+do
+    echo ${iter_cmdopt} >> ${cmdoptfile}
+done
+
+# const or global param
 id_k="BkPTdVZaOYaoML6UwMGJyg=="
 id_h="ZT5pUv4JKL1tomT0u9SEdA=="
-
-#result
-res_code=""
-resfile=tmpResultCode.tmp
-gitlogfile=crontab.log
-gitcodefile=vcode.txt
-configfile=tmpConfig.cfg
+configSep=":"
+cmdOptSep="="
+keepAliveTimeout=3600
+seekTimeout=3000
+lineTimeout=30
+configfile=tmpConfig_${shellname}.cfg
 configKeyOkCode="cfg_ok_code"
 configKeyOkId="cfg_ok_id"
-configSep=":"
+configKeyOldHour="cfg_old_hour"
+configKeyKeepAlive="cfg_keep_alive"
+configKeyLastSeek="cfg_last_seek"
+configKeyShellPid="cfg_shell_pid"
+
+colorecho()
+{
+    p_color=$1;shift;
+    p_msg=$*
+    p_color_code=32
+    [ "${p_color:0:1}x" == "rx" ] && p_color_code=31
+    [ "${p_color:0:1}x" == "gx" ] && p_color_code=32
+    echo -e "\\033[${p_color_code}m\\033[1m${p_msg}\\033[0m"
+}
+save_config()
+{
+    p_cfgfile=$1;shift;
+    p_key=$1;shift;
+    p_value=$1;shift
+
+    touch ${p_cfgfile}
+    cat ${p_cfgfile} | grep -v "${p_key}${configSep}" > ${p_cfgfile}.swap && mv ${p_cfgfile}.swap ${p_cfgfile}
+    echo "${p_key}${configSep}${p_value}" >> ${p_cfgfile}
+}
+read_config()
+{
+    p_cfgfile=$1;shift;
+    p_key=$1;shift;
+    p_value=$1;shift
+
+    touch ${p_cfgfile}
+    new_value=`cat "${p_cfgfile}" | grep "${p_key}${configSep}" | cut -d "${configSep}" -f 2-`
+    [ "${new_value}x" == "x" -a "${p_value}x" != "x" ] && new_value="${p_value}"
+    echo "${new_value}"
+}
+# DO NOT call this function in `` or $() directly or indirectly, exit will no work if you do this!!
+keep_alive()
+{
+    p_force=$1;shift;
+
+    [ "${p_force}x" != "x" ] && save_config ${configfile} ${configKeyShellPid} "$$"
+    [ $(read_config ${configfile} ${configKeyShellPid} 0) -eq $$ ] && save_config ${configfile} ${configKeyKeepAlive} "$(date +%s)" || { echo "$(colorecho "r" "Error: unmatch shell pid!")"; exit_clsopt 3; }
+}
+getcmdopt()
+{
+    p_key=$1;shift;
+    p_def=$1;shift;
+
+    p_sep="${cmdOptSep}"
+    opt_value=`cat ${cmdoptfile} | grep "^${p_key}${p_sep}" | head -n 1 | cut -d "${p_sep}" -f 2-`
+    [ "${opt_value}x" == "x" -a "${p_def}x" != "x" ] && opt_value="${p_def}"
+    echo "${opt_value}"
+}
+exit_clsopt()
+{
+    p_exitcode=$1;shift;
+    [ "${p_exitcode}x" == "x" ] && p_exitcode=0
+    
+    rm -rf ${cmdoptfile}
+    [ $(read_config ${configfile} ${configKeyShellPid} 0) -eq $$ ] && save_config ${configfile} ${configKeyKeepAlive} 0
+    exit ${p_exitcode}
+}
+ck=$(getcmdopt "ck")
+n1=$(getcmdopt "n1")
+n2=$(getcmdopt "n2")
+
+keepAliveValue=`read_config ${configfile} ${configKeyKeepAlive} 0`
+switchForceRun=$(getcmdopt "forceRun" "no")
+[ $(($(date +%s)-${keepAliveValue})) -gt ${keepAliveTimeout} ] && switchCanRun="yes" || switchCanRun="no"
+[ "${switchCanRun}x" == "yesx" -o "${switchForceRun}x" == "yesx" ] && runColor="g" || runColor="r"
+echo "$(colorecho "${runColor}" "BEGIN ") $(date +"%Y-%m-%d %H:%M:%S") cmd_ck=${ck} cmd_n1=${n1} cmd_n2=${n2} canRun=${switchCanRun} forceRun=${switchForceRun}"
+[ "${runColor}x" != "gx" ] && exit_clsopt 2
+
+# begin run and mark self
+keep_alive "setPid"
+
+#result
+res_codeH=""
+res_codeK=""
+resfile=tmpResultCode_${shellname}.tmp
+gitlogfile=crontab.log
+gitcodefile=vcode.txt
 #ok inf
 ok_code=242
 ok_id="${id_k}"
-touch ${configfile}
-cfgValue=`cat "${configfile}" | grep "${configKeyOkCode}" | cut -d "${configSep}" -f 2-`
+cfgValue=`read_config ${configfile} ${configKeyOkCode}`
 [ "${cfgValue}x" != "x" ] && ok_code=${cfgValue}
-cfgValue=`cat "${configfile}" | grep "${configKeyOkId}" | cut -d "${configSep}" -f 2-`
+cfgValue=`read_config ${configfile} ${configKeyOkId}`
 [ "${cfgValue}x" != "x" ] && ok_id=${cfgValue}
 
 query_park()
@@ -91,11 +179,16 @@ do_try()
 {
     p_ck=$1;shift;
     p_code=$1;shift;
-    p_s=`check_park ${p_ck} ${p_code} ${id_h}`
+    p_tryId=$1;shift;
+    
+    keep_alive
+    [ "${p_tryId}x" == "x" ] && p_tryId="${id_h}"
+    p_s=`check_park ${p_ck} ${p_code} ${p_tryId}`
     if echo "${p_s}" | grep -q "res:success"
     then
         echo -n -e " [\\033[32m\\033[1m$(printf "%3d" ${p_code})\\033[0m]"
-        res_code="${res_code}${p_code} "
+        [ "${p_tryId}x" == "${id_h}x" ] && res_codeH="${res_codeH} ${p_code} "
+        [ "${p_tryId}x" == "${id_k}x" ] && res_codeK="${res_codeK} ${p_code} "
     else
         ns=`echo "${p_s}" | grep "res:fail:code" | cut -d ":" -f 4`
         [ "${ns}z" == "z" ] && ns="Q"
@@ -107,6 +200,7 @@ sendgit()
 {
     p_file=$1;shift;
     p_linen=$1;shift;
+    p_desc=$1;shift;
     p_msg=$*
 
     p_dir=~/work/code/github/board
@@ -115,44 +209,70 @@ sendgit()
 
     echo "${p_gittime} ${p_msg}" | cat - ${p_dir}/${p_file} | head -n ${p_linen} > ${p_tmpfile}
     cat ${p_tmpfile} > ${p_dir}/${p_file}
-    cd ${p_dir} && git commit -a -m "add line by cmd"; cd -
-    cd ${p_dir} && git push; cd -
+    cd ${p_dir} && git commit -a -m "add line by shell" && echo "git commit [${p_desc}] $(colorecho "g" "success")" || echo "git commit [${p_desc}] $(colorecho "r" "fail")"; cd -
+    cd ${p_dir} && git push && echo "git push [${p_desc}] $(colorecho "g" "success")" || echo "git push [${p_desc}] $(colorecho "r" "fail")"; cd -
 }
 loggit()
 {
+    p_desc=$1;shift;
     p_msg=$*
-    sendgit ${gitlogfile} 50 ${p_msg}
+    sendgit ${gitlogfile} 60 ${p_desc} ${p_msg}
+}
+trim_str()
+{
+    p_str=$*
+
+    echo "${p_str}" | grep "[0-9]\+" -o | sort -n | uniq | paste -s -d " " -
+}
+savefile()
+{
+    p_resfile=$1;shift;
+    p_codeH=$1;shift;
+    p_codeK=$1;shift;
+        
+    echo -n "" > ${p_resfile}
+    for i in `echo "${p_codeH}" | grep "[0-9]\+" -o`
+    do
+        echo "${i}:${id_h}" >> ${resfile}
+    done
+    for i in `echo "${p_codeK}" | grep "[0-9]\+" -o`
+    do
+        echo "${i}:${id_k}" >> ${resfile}
+    done
 }
 savegit()
 {
     p_msg=$*
-    sendgit ${gitcodefile} 7 ${p_msg}
+    sendgit ${gitcodefile} 7 "SaveCode" ${p_msg}
 }
 
-# ckinfo 392a777819e640839d2d838a2855239f239a53f4 15263819410 20191023
 # ckinfo ef74b1cf95139da7ce9d19ce02113a2f5914f71c 17128240042 20191023
-# ckinfo 24a6af824b90763b738663e64464c682ed5d09ad 17128240164 20191023
 # ckinfo a75ef402921948a497acdb38b0bef33c5b245e90 18866478794 20191023
+# ckinfo 4a961a7390091a410675839e8d4622bf8b37fef7 17109324204 20191020 1023x 1028
+# ckinfo 364beeb9d67580f6ab8f1906e36f576a7ff3925d 18866674180 20191023 1023x 1028
+# ckinfo 8db19b98f9f8e97820da19772e77875d90407413 18866674211 20191023 1023x 1028
+# ckinfo 392a777819e640839d2d838a2855239f239a53f4 15263819410 20191023
 #
 # ckinfo 25c04bd9b5b7e78a44f5546219dacd1d2fa8913f 13001077534 20191014 1023 slow
-# ckinfo 892972fd5a016156bfad33c119ce1283a801e3f6 13521838587 20191020 1023 x
-# ckinfo 4a961a7390091a410675839e8d4622bf8b37fef7 17109324204 20191020 1023 x
-# ckinfo 6a0b36cde3bf78babfce15b8da8af79dc694b231 18515987963 20190901 1023 x
-# ckinfo 364beeb9d67580f6ab8f1906e36f576a7ff3925d 18866674180 20191023 1023 x
-# ckinfo 8db19b98f9f8e97820da19772e77875d90407413 18866674211 20191023 1023 x
+# ckinfo 24a6af824b90763b738663e64464c682ed5d09ad 17128240164 20191023
+# ckinfo 892972fd5a016156bfad33c119ce1283a801e3f6 13521838587 20191020 1023x 1028
+# ckinfo 6a0b36cde3bf78babfce15b8da8af79dc694b231 18515987963 20190901 1023x 1028
 #
 #如果速度很慢，重新登录换一个Cookie
 
 # test cookie
 ck_set="
-392a777819e640839d2d838a2855239f239a53f4
 ef74b1cf95139da7ce9d19ce02113a2f5914f71c
-24a6af824b90763b738663e64464c682ed5d09ad
 a75ef402921948a497acdb38b0bef33c5b245e90
+4a961a7390091a410675839e8d4622bf8b37fef7
+364beeb9d67580f6ab8f1906e36f576a7ff3925d
+8db19b98f9f8e97820da19772e77875d90407413
+392a777819e640839d2d838a2855239f239a53f4
 "
 best_ck=""
 besk_ckt=998
 ck_OK_n=0
+ck_Fail_n=0
 for ick in ${ck_set}
 do
     cks1=`date +%s`
@@ -160,73 +280,123 @@ do
     cks2=`date +%s`
     ck_t=$((cks2-cks1))
     echo -n "[$(printf "%3d" ${ck_t})] ${ck_flag} ${ick}"
-    [ "${ck_flag}x" == "Yx" ] && ck_OK_n=$((ck_OK_n+1))
+    [ "${ck_flag}x" == "Yx" ] && ck_OK_n=$((ck_OK_n+1)) || ck_Fail_n=$((ck_Fail_n+1))
     [ "${ck_flag}x" == "Yx" -a \( ${ck_t} -lt ${besk_ckt} -o "${best_ck}x" == "x" \) ] && { besk_ckt=${ck_t}; best_ck="${ick}"; echo " U"; } || { echo " -"; }
 done
-echo "ckN:${ck_OK_n} T:${besk_ckt} ${best_ck}"
+echo "ckN:${ck_OK_n}:${ck_Fail_n} T:${besk_ckt} ${best_ck}"
 
 [ "${ck}x" == "x" ] && ck="${best_ck}"
 [ "${n1}x" == "x" ] && n1=10
 [ "${n2}x" == "x" ] && n2=999
-echo -n -e "\\033[32m\\033[1m$ BEGIN \\033[0m "; date +"%Y-%m-%d %H:%M:%S"; echo " begin=${n1} end=${n2} ck=${ck} ${ok_id:0:2}_Code=${ok_code}"
+echo " begin=${n1} end=${n2} ck=${ck} ${ok_id:0:2}_Code=${ok_code}"
 if [ "${ck}x" == "x" ]
 then
-    errExitMsg="ckN=${ck_OK_n} T=${besk_ckt} err=noValidCk"
+    errExitMsg="ckN=${ck_OK_n}:${ck_Fail_n} T=${besk_ckt} err=noValidCk"
     echo "${errExitMsg}"
-    loggit "${errExitMsg}"
-    exit 1
+    loggit "LostCk" "${errExitMsg}"
+    exit_clsopt 1
 fi
+find_best_ck()
+{
+    p_def_ck=$1;shift;
+    
+    p_best_ck="${p_def_ck}"
+    p_best_ckt=997
+    for ick in ${ck_set}
+    do
+        cks1=`date +%s`
+        check_park ${ick} | grep -q "res:fail:ck" && ck_flag="n" || ck_flag="Y"
+        cks2=`date +%s`
+        ck_t=$((cks2-cks1))
+        [ "${ck_flag}x" == "Yx" -a \( ${ck_t} -lt ${p_best_ckt} -o "${p_best_ck}x" == "x" \) ] && { p_best_ckt=${ck_t}; p_best_ck="${ick}"; }
+    done
+    echo "${p_best_ck}"
+}
 
-cfm_okN=0
+cfm_N=0
+cfm_HokN=0
+cfm_KokN=0
 cfm_failN=0
+cfm_HfailN=0
+cfm_KfailN=0
 cfm_checkRes=""
 ok_code_bak=""
+ok_id_bak=""
 touch ${resfile}
-for i in `cat ${resfile}`
+for iterLine in `cat ${resfile}`
 do
-    s=`check_park ${ck} ${i} ${id_h}`
+    cfm_N=$((cfm_N+1))
+    iterCode=`echo ${iterLine} | cut -s -d ":" -f 1`
+    iterId=`echo ${iterLine} | cut -s -d ":" -f 2`
+    [ "${iterId}x" == "x" ] && iterId="${id_h}"
+    iterIdType="X"
+    [ "${iterId}x" == "${id_k}x" ] && iterIdType="K"
+    [ "${iterId}x" == "${id_h}x" ] && iterIdType="H"
+    s=`check_park ${ck} ${iterCode} ${iterId}`
     if echo "${s}" | grep -q "res:success" 
     then
-        ok_code_bak=${i}
-        cfm_okN=$((cfm_okN+1))
-        res_code="${res_code}${i} "
-        cfm_checkRes="${cfm_checkRes}[${i}]<ok>"
+        ok_code_bak=${iterCode}
+        ok_id_bak="${iterId}"
+        [ "${iterId}x" == "${id_h}x" ] && { cfm_HokN=$((cfm_HokN+1)); res_codeH="${res_codeH} ${iterCode} "; }
+        [ "${iterId}x" == "${id_k}x" ] && { cfm_KokN=$((cfm_KokN+1)); res_codeK="${res_codeK} ${iterCode} "; }
+        cfm_checkRes="${cfm_checkRes}${iterCode}<${iterIdType}y>"
     else
         cfm_failN=$((cfm_failN+1))
-        cfm_checkRes="${cfm_checkRes}[${i}]<fail>"
+        [ "${iterId}x" == "${id_h}x" ] && cfm_HfailN=$((cfm_HfailN+1))
+        [ "${iterId}x" == "${id_k}x" ] && cfm_KfailN=$((cfm_KfailN+1))
+        cfm_checkRes="${cfm_checkRes}${iterCode}<${iterIdType}n>"
     fi
 done
-cfm_passFlag="no"
+cfm_HpassFlag="no"
+cfm_KpassFlag="no"
 needSaveGitCode="NA"
-if [ ${cfm_okN} -ge 1 ]
+forceSeek=$(getcmdopt "forceSeek")
+if echo "${forceSeek}" | grep -q "Hotel"
 then
-    if [ ${cfm_okN} -ge 2 -o ${cfm_failN} -eq 0 ]
+    cfm_HpassFlag="force"
+elif [ ${cfm_HokN} -ge 1 ]
+then
+    if [ ${cfm_HokN} -ge 2 -o ${cfm_HfailN} -eq 0 ]
     then
-        cfm_passFlag="yes"
-        [ ${cfm_failN} -gt 0 ] && needSaveGitCode="yes" || needSaveGitCode="no"
+        cfm_HpassFlag="yes"
     fi
 fi
-logTxt="ckN=${ck_OK_n}:${besk_ckt}s codeN=${cfm_okN}:${cfm_failN}:${cfm_passFlag}:${needSaveGitCode} checkRes=${cfm_checkRes} ck=${ck}"
+if echo "${forceSeek}" | grep -q "KTV"
+then
+    cfm_KpassFlag="force"
+elif [ ${cfm_KokN} -ge 1 ]
+then
+    KLastSeekValue=`read_config ${configfile} "${configKeyLastSeek}K" 0`
+    if [ ${cfm_KokN} -ge 2 -o \( ${cfm_KfailN} -le 0 -a $(($(date +%s)-${KLastSeekValue})) -lt ${seekTimeout} \) ]
+    then
+        cfm_KpassFlag="yes"
+    fi
+fi
+if [ "${cfm_HpassFlag}x" == "yesx" -a "${cfm_KpassFlag}x" == "yesx" ]
+then
+    [ ${cfm_failN} -gt 0 ] && needSaveGitCode="yes" || needSaveGitCode="no"
+fi
+logTxt="ckN=${ck_OK_n}:${ck_Fail_n}:${besk_ckt}s codeN=${cfm_HokN}:${cfm_KokN}:${cfm_HfailN}:${cfm_KfailN}/${cfm_N}:${cfm_HpassFlag}:${cfm_KpassFlag}:${needSaveGitCode} checkRes=${cfm_checkRes} ck=${ck}"
 
 # check ok_code and ok_id
 check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && logTxt="${ok_id:0:2}=${ok_code} ${logTxt}" || ok_code=""
-[ "${ok_code}x" == "x" -a "${ok_code_bak}x" != "x" ] && { ok_code=${ok_code_bak}; ok_id="${id_h}"; logTxt="H=${ok_code} ${logTxt}"; }
+[ "${ok_code}x" == "x" -a "${ok_code_bak}x" != "x" ] && { ok_code=${ok_code_bak}; ok_id="${ok_id_bak}"; logTxt="${ok_id:0:3}=${ok_code} ${logTxt}"; }
 [ "${ok_code}x" == "x" ] && logTxt="err=noValidOkCode ${logTxt}"
 
 # send by github
 echo ${logTxt}
-loggit ${logTxt}
+loggit "InfoLog" ${logTxt}
 
 # exit if no ok_code can use
 if [ "${ok_code}x" == "x" ]
 then
-    exit 1
+    exit_clsopt 1
 fi
 
 # save ok_code and ok_id
-echo -n "" >${configfile}
-echo "${configKeyOkCode}${configSep}${ok_code}" >> ${configfile}
-echo "${configKeyOkId}${configSep}${ok_id}" >> ${configfile}
+save_config ${configfile} ${configKeyOkCode} "${ok_code}"
+save_config ${configfile} ${configKeyOkId} "${ok_id}"
+save_config ${configfile} ${configKeyOldHour} "$(date +%Y-%m-%d_%H)"
 
 # reset ck
 for ick in ${ck_set}
@@ -234,52 +404,94 @@ do
     check_park ${ick} ${ok_code} ${ok_id} | grep -q "res:success" && echo "[RST] Y ok_code=${ok_code} ck=${ick}" || echo "[RST] n ok_code=${ok_code} ck=${ick}"
 done
 
-if [ "${cfm_passFlag}x" == "yesx" ]
+if [ "${cfm_HpassFlag}x" == "yesx" -a "${cfm_KpassFlag}x" == "yesx" ]
 then
     # sync code to git if need
     if [ "${needSaveGitCode}x" == "yesx" ]
     then
-        echo "${res_code}" > ${resfile}
-        savegit ${res_code}
+        savefile ${resfile} "${res_codeH}" "${res_codeK}"
+        savegit "Hotel: $(trim_str ${res_codeH}) KTV: $(trim_str ${res_codeK})"
     fi
-    exit 0
+    exit_clsopt 0
 fi
 
+time2letter()
+{
+    p_time=$1;shift;
 
-
-meter_d1=`date +"%Y-%m-%d %H:%M:%S"`
-meter_n=0
-ctrl_ln=30
-ctrl_lc=0
-echo -n `date +%H:%M:%S`
-for i in `seq ${n1} 3 ${n2}`
-do 
-    j=${i}
-    # reset code
-    rstSucFlag="false"
-    for idxRst in `seq 1 9`
-    do
-        check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && { echo -n " Y${idxRst}"; rstSucFlag="success"; break; } || echo "<${idxRst}>"
-    done
-    [ "${rstSucFlag}x" != "successx" ] && { echo " Fail"; exit 1; }
-    
-    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
-    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
-    do_try ${ck} ${j}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
-    if [ ${ctrl_lc} -ge ${ctrl_ln} ]
+    p_letter="#"
+    if [ ${p_time} -le 0 ]
     then
-        echo ""
-        echo -n `date +%H:%M:%S`
-        ctrl_lc=0
+        p_letter="@"
+    elif [ ${p_time} -gt 26 ]
+    then
+        p_letter="$"
+    else
+        p_letter=`echo "ABCDEFGHIJKLMNOPQRSTUVWXYZ" | cut -c${p_time}`
     fi
-done
-meter_d2=`date +%Y-%m-%d#%H:%M:%S`
-echo ""
-res_code=`echo "${res_code}" | grep "[0-9]\+" -o | sort -n | uniq | paste -s -d " " -`
-echo "beginT=${meter_d1} endT=${meter_d2} n=${meter_n} res_code=${res_code}"
-echo "${res_code}" > ${resfile}
+    [ "${p_letter}x" == "x" ] && p_letter="*"
+    echo ${p_letter}
+}
+seek_code()
+{
+    p_tryId=$1;shift;
+    [ "${p_tryId}x" == "x" ] && p_tryId="${id_h}"
+    p_seekType="X"
+    [ "${p_tryId}x" == "${id_h}x" ] && p_seekType="H"
+    [ "${p_tryId}x" == "${id_k}x" ] && p_seekType="K"
 
+    meter_d1=`date +"%Y-%m-%d %H:%M:%S"`
+    meter_n=0
+    ctrl_ln=30
+    ctrl_lc=${ctrl_ln}
+    lineT1=$(date +%s)
+    echo "SeekId: ${p_tryId} ck=${ck}"
+    for i in `seq ${n1} 3 ${n2}`
+    do 
+        if [ ${ctrl_lc} -ge ${ctrl_ln} ]
+        then
+            lineT2=$(date +%s);lineT=$((${lineT2}-${lineT1}));lineT1=$(date +%s);
+            [ ${lineT} -gt ${lineTimeout} ] && ck=$(find_best_ck ${ck})
+            echo ""
+            echo -n "$(date +%H:%M:%S) $(printf "%3d" ${lineT}) ${ck:0:2}"
+            ctrl_lc=0
+        fi
+        
+        j=${i}
+        # reset code
+        rstSucFlag="false"
+        rstBeginTime=`date +%s`
+        for idxRst in `seq 1 9`
+        do
+            [ $(echo $RANDOM | cut -c1) -le 1 ] && continue
+            check_park ${ck} ${ok_code} ${ok_id} | grep -q "res:success" && { echo -n " $(time2letter $(($(date +%s)-${rstBeginTime})))${idxRst}"; rstSucFlag="success"; break; } || echo -n "<${idxRst}>"
+        done
+        [ "${rstSucFlag}x" != "successx" ] && { echo " Fail"; exit_clsopt 1; }
+    
+        do_try ${ck} ${j} ${p_tryId}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+        do_try ${ck} ${j} ${p_tryId}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+        do_try ${ck} ${j} ${p_tryId}; meter_n=$((meter_n+1)); ctrl_lc=$((ctrl_lc+1)); j=$((j+1));
+    done
+    meter_d2=`date +%Y-%m-%d#%H:%M:%S`
+    echo ""
+    res_codeH=`echo "${res_codeH}" | grep "[0-9]\+" -o | sort -n | uniq | paste -s -d " " -`
+    res_codeK=`echo "${res_codeK}" | grep "[0-9]\+" -o | sort -n | uniq | paste -s -d " " -`
+    echo "beginT=${meter_d1} endT=${meter_d2} n=${meter_n} seekId=${p_tryId:0:2} res_codeH=${res_codeH} res_codeK=${res_codeK}"
+    save_config ${configfile} "${configKeyLastSeek}${p_seekType}" "$(date +%s)"
+}
+
+[ "${cfm_HpassFlag}x" == "yesx" ] || seek_code ${id_h}
+[ "${cfm_KpassFlag}x" == "yesx" ] || seek_code ${id_k}
 
 # send by github
-savegit ${res_code}
+if [ "${tryId}x" != "${id_k}x" ]
+then
+    savefile ${resfile} "${res_codeH}" "${res_codeK}"
+    savegit "Hotel: $(trim_str ${res_codeH}) KTV: $(trim_str ${res_codeK})"
+else
+    loggit "logKTVcode" "log_KTV_code: ${res_codeK}"
+fi
+
+# exit with clear action
+exit_clsopt 0
 
