@@ -1,3 +1,4 @@
+10-31 16:40:10 Bk=242 ckN=5:0:0s codeN=2:1:0:0/3:yes:no:NA checkRes=121<Hy>793<Hy>242<Ky> ck=4a961a7390091a410675839e8d4622bf8b37fef7
 10-31 16:00:43 Bk=242 ckN=5:0:0s codeN=1:1:1:0/3:no:no:NA checkRes=105<Hn>793<Hy>242<Ky> ck=364beeb9d67580f6ab8f1906e36f576a7ff3925d
 10-31 15:50:53 Bk=242 ckN=5:0:0s codeN=1:1:1:0/3:no:no:NA checkRes=105<Hn>793<Hy>242<Ky> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-31 15:43:00 Bk=242 ckN=5:0:0s codeN=2:1:0:0/3:yes:no:NA checkRes=105<Hy>793<Hy>242<Ky> ck=4a961a7390091a410675839e8d4622bf8b37fef7
@@ -57,4 +58,3 @@
 10-30 01:32:08 Bk=242 ckN=9:0:0s codeN=2:0:force_KTV:NA checkRes=[157]<ok>[355]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-30 01:06:10 Bk=242 ckN=9:0:0s codeN=2:0:yes:no checkRes=[157]<ok>[355]<ok> ck=ef74b1cf95139da7ce9d19ce02113a2f5914f71c
 10-30 00:06:10 Bk=242 ckN=9:0:0s codeN=0:2:no:NA checkRes=[207]<fail>[472]<fail> ck=24a6af824b90763b738663e64464c682ed5d09ad
-10-29 23:06:10 Bk=242 ckN=9:0:0s codeN=2:0:yes:no checkRes=[207]<ok>[472]<ok> ck=24a6af824b90763b738663e64464c682ed5d09ad
