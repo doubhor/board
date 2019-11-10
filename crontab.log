@@ -1,3 +1,4 @@
+11-11 00:06:08 Bk=580 ckN=12:12-0/12-0s:0s[7-5-0-0] codeN=0:2:1-2:0:0/5 chkRes=no:yes:no:NA checkRes=143<Hn>939<Hn>489<Ky>580<Ky>109<Gy> ck=3b33
 11-10 23:06:24 Bk=580 ckN=12:9-0/12-1s:1s[0-9-3-0] codeN=2:2:1-1:0:0/6 chkRes=yes:yes:no:NA checkRes=143<Hy>737<Hn>939<Hy>489<Ky>580<Ky>109<Gy> ck=3b33
 11-10 22:06:27 Bk=580 ckN=12:5-0/12-1s:1s[0-5-7-0] codeN=3:2:1-0:0:0/6 chkRes=yes:yes:no:NA checkRes=143<Hy>737<Hy>939<Hy>489<Ky>580<Ky>109<Gy> ck=3f07
 11-10 21:06:21 Bk=580 ckN=12:12-0/12-0s:0s[1-11-0-0] codeN=3:2:1-0:0:0/6 chkRes=yes:yes:yes:no checkRes=143<Hy>737<Hy>939<Hy>489<Ky>580<Ky>109<Gy> ck=6e38
@@ -57,4 +58,3 @@
 11-08 20:06:08 Bk=580 ckN=12:12:0:0s codeN=2:1:1-0:0:0/4 chkRes=yes:yes:no:NA checkRes=462<Hy>731<Hy>580<Ky>695<Gy> ck=3b33
 11-08 19:06:18 Bk=580 ckN=12:9:0:0s codeN=2:1:1-0:0:0/4 chkRes=yes:yes:no:NA checkRes=462<Hy>731<Hy>580<Ky>695<Gy> ck=c36e
 11-08 18:06:09 Bk=580 ckN=12:12:0:0s codeN=2:1:1-0:0:0/4 chkRes=yes:no:no:NA checkRes=462<Hy>731<Hy>580<Ky>695<Gy> ck=3b33
-11-08 16:06:09 Bk=580 ckN=12:12:0:0s codeN=1:1:1-1:0:0/4 chkRes=no:yes:no:NA checkRes=580<Hn>731<Hy>580<Ky>695<Gy> ck=3f07
