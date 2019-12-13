@@ -1,3 +1,4 @@
+12-14 00:18:46 Hotel: 893 935 KTV: 21 127 Group: 
 12-13 23:20:14 Hotel: 78 366 KTV: 21 127 Group: 
 12-13 19:49:20 Hotel: 366 706 KTV: 21 127 Group: 
 12-13 12:36:32 Hotel: 366 706 KTV: 21 127 Group: 744
@@ -57,4 +58,3 @@
 12-03 08:48:34 Hotel: 303 KTV:  Group: 160
 12-03 01:12:10 Hotel: 303 KTV: 117 Group: 29
 12-03 00:18:58 Hotel: 111 303 KTV: 117 Group: 29
-12-02 19:45:17 Hotel: 507 765 KTV: 117 Group: 29
