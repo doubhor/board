@@ -1,3 +1,4 @@
+12-30 15:06:07 Bk=61 ckN=7:07-0/7 0298ms: 499ms[04-03-0-0] codeN=2:2:0-0:0:0/4 chkRes=OK:OK:No:NA checkRes=755_H_762_H_61_K_776_K_ ck=a168
 12-30 14:36:05 Bk=61 ckN=7:07-0/7 0319ms: 370ms[05-02-0-0] codeN=2:2:0-0:0:0/4 chkRes=OK:OK:No:NA checkRes=755_H_762_H_61_K_776_K_ ck=a168
 12-30 14:06:07 Bk=61 ckN=7:07-0/7 0311ms: 452ms[03-04-0-0] codeN=2:2:0-0:0:0/4 chkRes=OK:OK:No:NA checkRes=755_H_762_H_61_K_776_K_ ck=9ab4
 12-30 13:36:07 Bk=61 ckN=7:07-0/7 0365ms: 556ms[03-04-0-0] codeN=2:2:0-0:0:0/4 chkRes=OK:OK:No:NA checkRes=755_H_762_H_61_K_776_K_ ck=a168
@@ -141,4 +142,3 @@
 12-27 12:36:06 Bk=61 ckN=7:07-0/7 0271ms: 388ms[05-02-0-0] codeN=3:2:1-0:0:0/6 chkRes=OK:OK:Ok:no checkRes=187_H_196_H_497_H_61_K_776_K_28_G_ ck=9ab4
 12-27 12:06:06 Bk=61 ckN=7:07-0/7 0270ms: 431ms[03-04-0-0] codeN=3:2:1-1:0:0/7 chkRes=OK:OK:Ok:yes checkRes=187_H_196_H_497_H_652_h_61_K_776_K_28_G_ ck=392d
 12-27 11:36:06 Bk=61 ckN=7:07-0/7 0274ms: 322ms[04-03-0-0] codeN=4:2:1-0:0:0/7 chkRes=OK:OK:Ok:no checkRes=187_H_196_H_497_H_652_H_61_K_776_K_28_G_ ck=70c5
-12-27 11:06:07 Bk=61 ckN=7:07-0/7 0305ms: 430ms[04-03-0-0] codeN=4:2:1-0:0:0/7 chkRes=OK:OK:Ok:no checkRes=187_H_196_H_497_H_652_H_61_K_776_K_28_G_ ck=c4a0
