@@ -1,3 +1,4 @@
+04-23 20:30:05 Hotel: 208 KTV: 496 Group: 461 Wuye: 
 04-23 19:44:41 Hotel: 208 KTV: 496 Group: 461 Wuye: 548 643
 04-23 18:51:31 Hotel: 310 499 KTV: 496 Group: 461 Wuye: 548 643 944
 04-23 17:26:04 Hotel: 310 499 KTV: 496 Group: 461 Wuye: 
@@ -57,4 +58,3 @@
 04-16 09:46:41 Hotel: 82 KTV: 177 496 Group: 909
 04-16 08:48:57 Hotel: 144 KTV: 177 496 Group: 909
 04-16 01:01:39 Hotel: 144 KTV: 177 496 Group: 
-04-15 23:09:11 Hotel: 144 KTV: 496 Group: 
