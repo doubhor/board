@@ -1,3 +1,4 @@
+05-17 11:51:03 Hotel: 508 714 KTV: 697 731 Group:  Wuye: 620
 05-17 09:51:00 Hotel: 508 714 KTV: 697 731 Group:  Wuye: 
 05-17 08:20:02 Hotel: 508 714 KTV: 697 731 Group: 258 Wuye: 
 05-17 00:20:12 Hotel: 508 510 714 KTV: 697 731 Group: 258 Wuye: 
@@ -57,4 +58,3 @@
 05-10 23:26:43 Hotel: 458 KTV: 553 731 Group: 713 Wuye: 
 05-10 22:57:10 Hotel: 303 458 KTV: 553 731 Group: 713 Wuye: 
 05-10 20:26:41 Hotel: 303 458 KTV: 731 822 Group: 713 Wuye: 
-05-10 16:54:52 Hotel: 683 KTV: 731 822 Group: 713 Wuye: 
