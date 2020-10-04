@@ -1,3 +1,4 @@
+10-04 16:36:03 Bk=386 ckN=2:02-0/2 0553ms: 563ms[02-00-0-0] codeN=2:2:0:0-0:0:0:0/4 chkRes=2:OK:OK:Og:Og:no checkRes=15_H_693_H_386_K_853_K_ ck=72a8 V=4-0
 10-04 16:06:03 Bk=386 ckN=2:02-0/2 0284ms: 359ms[01-01-0-0] codeN=2:2:0:0-0:0:0:0/4 chkRes=2:OK:OK:Og:Og:no checkRes=15_H_693_H_386_K_853_K_ ck=4b49 V=4-0
 10-04 15:36:03 Bk=386 ckN=2:02-0/2 0295ms: 329ms[02-00-0-0] codeN=2:2:0:0-0:0:0:0/4 chkRes=2:OK:OK:Og:Og:no checkRes=15_H_693_H_386_K_853_K_ ck=4b49 V=4-0
 10-04 15:06:03 Bk=386 ckN=2:02-0/2 0301ms: 312ms[01-01-0-0] codeN=2:2:0:0-0:0:0:0/4 chkRes=2:OK:OK:No:Og:NA checkRes=15_H_693_H_386_K_853_K_ ck=72a8 V=4-0
@@ -141,4 +142,3 @@
 10-01 18:06:05 Bk=867 ckN=2:02-0/2 0537ms: 553ms[01-01-0-0] codeN=2:2:1:0-0:0:0:0/5 chkRes=3:OK:OK:Ok:Oc:no checkRes=261_H_504_H_846_K_867_K_560_G_ ck=72a8 V=5-0
 10-01 17:36:03 Bk=867 ckN=2:02-0/2 0308ms: 319ms[01-01-0-0] codeN=2:2:1:0-0:0:0:0/5 chkRes=3:OK:OK:Ok:Oc:no checkRes=261_H_504_H_846_K_867_K_560_G_ ck=4b49 V=5-0
 10-01 17:06:03 Bk=867 ckN=2:02-0/2 0279ms: 314ms[01-01-0-0] codeN=2:2:1:0-0:0:0:0/5 chkRes=3:OK:OK:Ok:Oc:no checkRes=261_H_504_H_846_K_867_K_560_G_ ck=4b49 V=5-0
-10-01 16:36:03 Bk=867 ckN=2:02-0/2 0323ms: 353ms[01-01-0-0] codeN=2:2:1:0-0:0:0:0/5 chkRes=3:OK:OK:Ok:No:NA checkRes=261_H_504_H_846_K_867_K_560_G_ ck=4b49 V=5-0
