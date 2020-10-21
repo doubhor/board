@@ -1,3 +1,4 @@
+10-21 20:36:09 Hotel: 292 312 804 KTV: 227 Group:  Wuye: 
 10-21 09:36:09 Hotel: 292 312 804 KTV: 77 227 Group:  Wuye: 
 10-21 00:15:23 Hotel: 292 312 804 KTV: 77 227 Group:  Wuye: 972
 10-21 00:06:11 Hotel:  KTV: 77 227 Group:  Wuye: 972
@@ -57,4 +58,3 @@
 10-16 20:36:09 Hotel: 195 KTV: 124 227 Group:  Wuye: 388
 10-16 18:36:12 Hotel: 195 416 KTV: 124 227 Group:  Wuye: 388
 10-16 17:06:09 Hotel: 195 416 KTV: 124 227 Group: 646 701 Wuye: 388
-10-16 16:59:14 Hotel: 195 416 KTV: 124 227 Group: 588 646 701 Wuye: 388
