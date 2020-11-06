@@ -1,3 +1,4 @@
+11-06 16:06:16 Hotel: 211 926 KTV: 126 821 Group: 120 Wuye: 
 11-06 15:36:18 Hotel: 211 926 KTV: 126 821 Group: 120 406 Wuye: 
 11-06 14:06:18 Hotel: 211 926 KTV: 126 821 Group: 120 406 461 Wuye: 
 11-06 13:36:21 Hotel: 106 211 926 KTV: 126 821 Group: 120 406 461 Wuye: 
@@ -57,4 +58,3 @@
 11-01 10:36:10 Hotel: 682 956 KTV: 227 668 Group:  Wuye: 
 11-01 00:36:09 Hotel: 682 956 KTV: 227 668 Group: 799 Wuye: 
 11-01 00:16:18 Hotel: 513 682 939 956 KTV: 227 668 Group: 799 Wuye: 
-10-31 23:06:10 Hotel: 513 939 KTV: 227 668 Group: 799 Wuye: 
