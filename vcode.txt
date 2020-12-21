@@ -1,3 +1,4 @@
+12-21 19:33:56 Hotel: 569 691 KTV: 510 935 Group: 424 506 739 918 Wuye: 
 12-21 19:16:17 Hotel: 569 691 KTV: 510 935 Group:  Wuye: 
 12-21 18:16:22 Hotel: 569 691 KTV: 510 935 Group: 111 Wuye: 
 12-21 16:16:20 Hotel: 569 691 KTV: 510 935 Group: 111 485 Wuye: 
@@ -57,4 +58,3 @@
 12-15 17:34:29 Hotel: 569 920 KTV: 510 935 Group: 470 502 566 951 Wuye: 
 12-15 17:16:17 Hotel: 569 920 KTV: 510 935 Group:  Wuye: 
 12-15 14:16:19 Hotel: 569 920 KTV: 510 935 Group: 665 Wuye: 
-12-15 13:16:21 Hotel: 569 920 KTV: 510 935 Group: 131 665 Wuye: 
