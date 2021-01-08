@@ -1,3 +1,4 @@
+01-08 12:39:20 Hotel: 689 774 869 KTV: 41 450 Group: 803 Wuye: 
 01-08 12:26:29 Hotel: 689 774 869 KTV: 41 450 Group:  Wuye: 
 01-08 12:18:54 Hotel: 689 774 KTV: 41 450 Group:  Wuye: 
 01-08 12:16:18 Hotel: 774 KTV: 41 450 Group:  Wuye: 
@@ -57,4 +58,3 @@
 01-06 22:32:56 Hotel: 424 770 KTV: 41 450 Group: 162 Wuye: 
 01-06 22:27:33 Hotel: 770 KTV: 41 450 Group: 162 Wuye: 
 01-06 22:16:19 Hotel:  KTV: 41 450 Group: 162 Wuye: 
-01-06 19:16:18 Hotel: 587 689 KTV: 41 450 Group: 162 Wuye: 
