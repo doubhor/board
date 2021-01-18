@@ -1,3 +1,4 @@
+01-18 08:16:20 Hotel: 615 KTV: 450 Group:  Wuye: 
 01-18 00:36:54 Hotel: 597 615 859 KTV: 450 Group: 480 Wuye: 
 01-18 00:27:39 Hotel: 597 859 KTV: 450 Group: 480 Wuye: 
 01-18 00:20:07 Hotel: 859 KTV: 450 Group: 480 Wuye: 
@@ -57,4 +58,3 @@
 01-16 00:25:17 Hotel: 421 708 754 KTV: 450 Group: 317 375 670 Wuye: 
 01-16 00:25:00 Hotel: 708 754 KTV: 450 Group: 317 375 670 Wuye: 
 01-16 00:16:56 Hotel: 708 KTV: 450 Group: 317 375 670 Wuye: 
-01-16 00:16:25 Hotel:  KTV: 450 Group: 317 375 670 Wuye: 
