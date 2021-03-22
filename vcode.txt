@@ -1,3 +1,4 @@
+03-22 08:31:00 Hotel: 4456 6075 KTV: 475 7270 Group:  Wuye: 
 03-22 08:17:58 Hotel: 6075 KTV: 475 7270 Group:  Wuye: 
 03-22 01:05:33 Hotel: 5279 6075 KTV: 475 7270 Group:  Wuye: 
 03-22 01:00:25 Hotel: 5279 KTV: 475 7270 Group:  Wuye: 
@@ -57,4 +58,3 @@
 03-18 00:16:23 Hotel:  KTV: 475 7270 Group:  Wuye: 
 03-17 22:08:46 Hotel: 1664 3044 KTV: 475 7270 Group:  Wuye: 
 03-17 21:25:34 Hotel: 1664 KTV: 475 7270 Group:  Wuye: 
-03-17 21:16:25 Hotel:  KTV: 475 7270 Group:  Wuye: 
