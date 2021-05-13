@@ -1,3 +1,4 @@
+05-13 16:35:57 ZT>862 ckN=1:01-14/15 0503ms:1180ms[05-09-0-0] codeN=1:0:0:0-2:0:1:0/4 chkRes=1:No:No:On:On:NA checkRes=115_h_862_H_961_h_151_g_ ck=d5a4 V=1-3
 05-13 16:31:19 ckN=0:00-14/14 T=998000 err=noValidCk
 05-13 16:16:18 ckN=0:00-14/14 T=998000 err=noValidCk
 05-13 16:03:23 ckN=0:00-14/14 T=998000 err=noValidCk
@@ -141,4 +142,3 @@
 05-11 16:33:30 ckN=0:00-14/14 T=998000 err=noValidCk
 05-11 16:18:29 ckN=0:00-14/14 T=998000 err=noValidCk
 05-11 16:05:20 ckN=0:00-14/14 T=998000 err=noValidCk
-05-11 15:31:22 Bk=516 ckN=5:05-1/6 0870ms:2617ms[00-05-0-0] codeN=2:1:0:1-0:0:0:0/4 chkRes=3:OK:No:Oc:Ok:NA checkRes=69_H_808_H_516_K_350_W_ ck=6b09 V=4-0
