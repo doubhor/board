@@ -1,3 +1,4 @@
+05-28 20:16:28 Hotel: 38 469 721 KTV: 540 647 Group:  Wuye: 423
 05-28 19:30:25 Hotel: 38 469 721 KTV: 540 647 Group: 874 Wuye: 423
 05-28 19:30:13 Hotel: 38 469 721 KTV: 540 647 Group:  Wuye: 423
 05-28 19:21:47 Hotel: 38 469 KTV: 540 647 Group:  Wuye: 423
@@ -57,4 +58,3 @@
 05-27 00:20:21 Hotel: 353 KTV: 540 647 Group: 167 799 Wuye: 
 05-27 00:16:27 Hotel:  KTV: 540 647 Group: 167 799 Wuye: 
 05-26 20:18:17 Hotel: 171 916 KTV: 540 647 Group: 167 799 Wuye: 744
-05-26 20:16:26 Hotel: 171 916 KTV: 540 647 Group: 167 Wuye: 744
