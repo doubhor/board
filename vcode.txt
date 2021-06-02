@@ -1,3 +1,4 @@
+06-02 13:18:11 Hotel: 185 343 KTV: 194 Group: 55 Wuye: 29
 06-02 13:16:30 Hotel: 185 343 KTV: 194 Group:  Wuye: 29
 06-02 12:16:24 Hotel: 185 343 KTV: 194 Group: 922 Wuye: 29
 06-02 10:25:28 Hotel: 56 185 343 KTV: 194 Group: 922 Wuye: 29
@@ -57,4 +58,3 @@
 05-30 14:27:13 Hotel: 378 773 861 KTV: 531 730 Group:  Wuye: 277
 05-30 14:19:29 Hotel: 773 861 KTV: 531 730 Group:  Wuye: 277
 05-30 14:16:20 Hotel: 861 KTV: 531 730 Group:  Wuye: 277
-05-30 10:17:26 Hotel: 858 861 KTV: 531 730 Group:  Wuye: 277
