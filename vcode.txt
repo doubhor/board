@@ -1,3 +1,4 @@
+07-05 14:34:42 Hotel: 820 924 KTV: 525 Group:  Wuye: 345
 07-05 14:20:26 Hotel: 820 KTV: 525 Group:  Wuye: 345
 07-05 14:16:33 Hotel:  KTV: 525 Group:  Wuye: 345
 07-05 10:19:08 Hotel: 258 326 545 KTV: 525 Group:  Wuye: 345
@@ -57,4 +58,3 @@
 07-01 22:16:29 Hotel: 98 KTV: 288 988 Group: 802 Wuye: 345 817 848
 07-01 21:24:18 Hotel: 98 721 KTV: 288 988 Group: 802 Wuye: 345 817 848
 07-01 21:23:03 Hotel: 98 721 KTV: 288 988 Group: 802 Wuye: 345 817
-07-01 20:28:49 Hotel: 98 721 KTV: 288 988 Group: 802 Wuye: 345
